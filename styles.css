@@ -13,4 +13,13 @@ div {
 
 img {
   width: 80px;
+  cursor: pointer;
+}
+
+img.startMovingPiece {
+  opacity: 0;
+}
+
+img.movingPiece {
+  opacity: 0;
 }

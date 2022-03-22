@@ -6,7 +6,7 @@ for (let i = 0; i < 64; i++) {
     parseInt(i / 8 + i) % 2 === 0 ? "#F6F7EB" : "#8693AB";
 }
 
-//selectring all squares as nodelist
+//selecting all squares as nodelist
 const allSquares = document.querySelectorAll("#mainChessBoard > div");
 
 //setting up the pieces on the board (starting position)
@@ -77,3 +77,16 @@ for (let i = 0; i < allSquares.length; i++) {
     allSquares[i].appendChild(chessPieceImg);
   }
 }
+
+//selecting all img/pieces as node list
+const allPieces = document.querySelectorAll("#mainChessBoard > div > img");
+
+allPieces.forEach((piece) => {
+  piece.addEventListener("dragstart", () => {
+    piece.classList.add("startMovingPiece");
+  });
+
+  piece.addEventListener("dragend", () => {
+    piece.classList.remove("startMovingPiece");
+  });
+});
