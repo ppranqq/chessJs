@@ -92,3 +92,25 @@ for (let i = 0; i < allSquares.length; i++) {
 
 //selecting all img/pieces as node list
 const allPieces = document.querySelectorAll("#mainChessBoard > div > img");
+
+//returning index of node from nodeList of pieces - this way i am selecting unique piece
+// this is gettign complicated atm
+const selectedPiece = (allPieces, allSquares) => {
+  for (let i = 0; i < allPieces.length; i++) {
+    allPieces[i].addEventListener("click", () => {
+      if (i != undefined) {
+        allPieces[i].classList.add("selectedPiece");
+
+        let pieceIndex = i;
+
+        for (let i = 0; i < allSquares.length; i++) {
+          allSquares[i].addEventListener("click", () => {
+            allSquares[i].appendChild(allPieces[pieceIndex]);
+          });
+        }
+      }
+    });
+  }
+};
+
+selectedPiece(allPieces, allSquares);
