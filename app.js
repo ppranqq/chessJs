@@ -1,116 +1,105 @@
-//generate chess board
-for (let i = 0; i < 64; i++) {
-  document
-    .getElementById("mainChessBoard")
-    .appendChild(document.createElement("div")).style.backgroundColor =
-    parseInt(i / 8 + i) % 2 === 0 ? "#F6F7EB" : "#8693AB";
-}
+const URL_PIECES_COLOR1 = './chessPieceSet-pngs/black';
+const URL_PIECES_COLOR2 = './chessPieceSet-pngs/white';
 
-//selecting all squares as nodelist
-const allSquares = document.querySelectorAll("#mainChessBoard > div");
-
-//setting up the pieces on the board (starting position), also adding classes to pieces to make them unique by they rules of moving
-for (let i = 0; i < allSquares.length; i++) {
-  const chessPieceImg = document.createElement("img");
-  const blackPiecesUrl = "./chessPieceSet-pngs/black";
-  const whitePiecesUrl = "./chessPieceSet-pngs/white";
-
-  //adding black pieces
-  //adding rooks
-  if (i === 0 || i === 7) {
-    chessPieceImg.src = blackPiecesUrl + "Rook.png";
-    allSquares[i].appendChild(chessPieceImg);
-    chessPieceImg.className = "ROOK";
-
-    //adding knights
-  } else if (i === 1 || i === 6) {
-    chessPieceImg.src = blackPiecesUrl + "Knight.png";
-    allSquares[i].appendChild(chessPieceImg);
-    chessPieceImg.className = "KNIGHT";
-
-    //adding bishops
-  } else if (i === 2 || i === 5) {
-    chessPieceImg.src = blackPiecesUrl + "Bishop.png";
-    allSquares[i].appendChild(chessPieceImg);
-    chessPieceImg.className = "BISHOP";
-
-    //adding queen
-  } else if (i === 3) {
-    chessPieceImg.src = blackPiecesUrl + "Queen.png";
-    allSquares[i].appendChild(chessPieceImg);
-    chessPieceImg.className = "QUEEN";
-
-    //adding king
-  } else if (i === 4) {
-    chessPieceImg.src = blackPiecesUrl + "King.png";
-    allSquares[i].appendChild(chessPieceImg);
-    chessPieceImg.className = "KING";
-
-    //adding pawns
-  } else if (i > 7 && i < 16) {
-    chessPieceImg.src = blackPiecesUrl + "Pawn.png";
-    allSquares[i].appendChild(chessPieceImg);
-    chessPieceImg.className = "PAWN"; // very important, later on i might want to use different logic for white and black pawns, maybe use blackPAWN, whitePAWN
-  }
-
-  //adding white pieces and classes as previously mentioned
-  //adding pawns
-  if (i > 47 && i < 56) {
-    chessPieceImg.src = whitePiecesUrl + "Pawn.png";
-    allSquares[i].appendChild(chessPieceImg);
-    chessPieceImg.className = "PAWN";
-  } else if (i === 56 || i === 63) {
-    chessPieceImg.src = whitePiecesUrl + "Rook.png";
-    allSquares[i].appendChild(chessPieceImg);
-    chessPieceImg.className = "ROOK";
-
-    //adding knights
-  } else if (i === 57 || i === 62) {
-    chessPieceImg.src = whitePiecesUrl + "Knight.png";
-    allSquares[i].appendChild(chessPieceImg);
-    chessPieceImg.className = "KNIGHT";
-
-    //adding bishops
-  } else if (i === 58 || i === 61) {
-    chessPieceImg.src = whitePiecesUrl + "Bishop.png";
-    allSquares[i].appendChild(chessPieceImg);
-    chessPieceImg.className = "BISHOP";
-
-    //adding queen
-  } else if (i === 59) {
-    chessPieceImg.src = whitePiecesUrl + "Queen.png";
-    allSquares[i].appendChild(chessPieceImg);
-    chessPieceImg.className = "QUEEN";
-
-    //adding king
-  } else if (i === 60) {
-    chessPieceImg.src = whitePiecesUrl + "King.png";
-    allSquares[i].appendChild(chessPieceImg);
-    chessPieceImg.className = "KING";
-  }
-}
-
-//selecting all img/pieces as node list
-const allPieces = document.querySelectorAll("#mainChessBoard > div > img");
-
-//returning index of node from nodeList of pieces - this way i am selecting unique piece
-// this is gettign complicated atm
-const selectedPiece = (allPieces, allSquares) => {
-  for (let i = 0; i < allPieces.length; i++) {
-    allPieces[i].addEventListener("click", () => {
-      if (i != undefined) {
-        allPieces[i].classList.add("selectedPiece");
-
-        let pieceIndex = i;
-
-        for (let i = 0; i < allSquares.length; i++) {
-          allSquares[i].addEventListener("click", () => {
-            allSquares[i].appendChild(allPieces[pieceIndex]);
-          });
-        }
-      }
-    });
-  }
+const CHECKER_COLOR = {
+  EVEN: '#F6F7EB',
+  ODD: '#8693AB'
 };
 
-selectedPiece(allPieces, allSquares);
+const generateChessBoard = mainChessBoard => {
+  //generate chess board
+  for (let i = 0; i < 64; i++) {
+    mainChessBoard.appendChild(document.createElement('div')).style.backgroundColor =
+      0 === parseInt(i / 8 + i) % 2 ? CHECKER_COLOR.EVEN : CHECKER_COLOR.ODD;
+  }
+
+  return document.querySelectorAll('#mainChessBoard > div');
+};
+
+const layoutInitialChessPieces = allSquares => {
+  let chessPieceImg, chosenColor;
+
+  //setting up the pieces on the board (starting position), also adding classes to pieces to make them unique by they rules of moving
+  for (let i = 0; i < allSquares.length; i++) {
+    let pieceName;
+    chosenColor = i < 48 ? URL_PIECES_COLOR1 : URL_PIECES_COLOR2;
+    chessPieceImg = document.createElement('img');
+
+    switch (i) {
+      case 0:
+      case 7:
+      case 56:
+      case 63:
+        pieceName = 'Rook';
+        break;
+      case 1:
+      case 6:
+      case 57:
+      case 62:
+        pieceName = 'Knight';
+        break;
+      case 2:
+      case 5:
+      case 58:
+      case 61:
+        pieceName = 'Bishop';
+        break;
+      case 3:
+      case 59:
+        pieceName = 'Queen';
+        break;
+      case 4:
+      case 60:
+        pieceName = 'King';
+        break;
+      default:
+        if (i < 16 || i > 47) {
+          pieceName = 'Pawn';
+        }
+        break;
+    }
+
+    if (pieceName) {
+      chessPieceImg.src = `${chosenColor}${pieceName}.png`;
+      chessPieceImg.className = pieceName.toUpperCase();
+      allSquares[i].appendChild(chessPieceImg);
+    }
+  }
+
+  return document.querySelectorAll('#mainChessBoard > div > img');
+};
+
+let isMoving = false,
+  movingIdx;
+
+/** @param {HTMLElement[]} chessPieces */
+const startMovingPiece = (chessPieces, index) => {
+  if (isMoving || !index) {
+    return;
+  }
+
+  chessPieces[index].classList.add('selectedPiece');
+  movingIdx = index;
+  isMoving = true;
+};
+
+/** @param {HTMLElement[]} chessPieces */
+const endMovingPiece = (chessSquares, chessPieces, index) => {
+  if (!isMoving) {
+    return;
+  }
+
+  chessPieces[movingIdx].classList.remove('selectedPiece');
+  chessSquares[index].appendChild(chessPieces[movingIdx]);
+  isMoving = false;
+  movingIdx = -1;
+};
+
+const mainChessBoard = document.getElementById('mainChessBoard');
+const chessSquares = generateChessBoard(mainChessBoard);
+const chessPieces = layoutInitialChessPieces(chessSquares);
+
+chessSquares.forEach((square, idx) =>
+  square.addEventListener('click', endMovingPiece.bind(null, chessSquares, chessPieces, idx), true)
+);
+chessPieces.forEach((piece, idx) => piece.addEventListener('click', startMovingPiece.bind(null, chessPieces, idx)));
